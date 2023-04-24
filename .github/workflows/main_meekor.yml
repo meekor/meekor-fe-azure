@@ -26,12 +26,18 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-        
+          
+      - name: Zip release
+        uses: TheDoctor0/zip-release@0.7.1
+        with:
+          filename: release.zip
+          path: ./src/dist/*
+          
       - name: upload artifact for deployment job
         uses: actions/upload-artifact@v3.1.2
         with:
           name: meekor-app
-          path: dist
+          path: release.zip
           
   deploy:
     runs-on: ubuntu-latest
@@ -42,7 +48,7 @@ jobs:
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2.1.1
+        uses: actions/download-artifact@v3.0.2
         with:
           name: meekor-app
           
@@ -53,4 +59,4 @@ jobs:
           app-name: 'meekor'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A403B5D79A854C1799F91F1A06F33D7A }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: release.zip
