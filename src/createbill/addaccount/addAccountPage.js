@@ -60,14 +60,21 @@ const AddAccountPage = () => {
     });
   };
 
-  const handleSelectChange = (event) => {
-    const selectedValue = event.target.value;
-    console.log(selectedValue);
+  const handleSelectChange = (selectedOption) => {
+    console.log(selectedOption);
     setState({
       ...state,
-      [event.target.name]: selectedValue,
+      bankName: selectedOption.value,
     });
   };
+  // const handleSelectChange = (event) => {
+  //   const selectedValue = event.target.value;
+  //   console.log(selectedValue);
+  //   setState({
+  //     ...state,
+  //     [event.target.name]: selectedValue,
+  //   });
+  // };
 
   // calculate sum price
   const calSum = () => {
@@ -199,7 +206,7 @@ const AddAccountPage = () => {
     // response = {"bill": {bill information},"qr_photo_id": ""}
     await axios
       .post(
-        `https://meekor.onrender.com/v1/group/${groupId}/bill`,
+        `https://meekor-be.azurewebsites.net/v1/group/${groupId}/bill`,
         billObject,
         {
           headers: {
@@ -224,8 +231,8 @@ const AddAccountPage = () => {
         contents: [
           {
             type: "text",
-            text: "" + userDict[debt.user_id],
-            color: "#FF0000",
+            text: "@" + userDict[debt.user_id],
+            color: "#694d43",
           },
           {
             type: "text",
@@ -297,7 +304,10 @@ const AddAccountPage = () => {
                     contents: [
                       {
                         type: "text",
-                        text: billInfo.billTitle,
+                        text: "บิล " + billInfo.billTitle,
+                        color: "#ff82a7",
+                        size: "lg",
+                        weight: "bold",
                       },
                       {
                         type: "box",
@@ -341,7 +351,7 @@ const AddAccountPage = () => {
                         "https://liff.line.me/1657560711-7MgLg4Ld?payment&billId=" +
                         resBillID,
                     },
-                    color: "#f2bdcd",
+                    color: "#ff82a7",
                     style: "primary",
                     margin: "sm",
                   },
@@ -643,7 +653,7 @@ const AddAccountPage = () => {
           </button>
         </div>
       </div>
-      <div className="flex justify-center mx-5 mb-4">
+      <div className="flex justify-center mx-5 mb-4 cream">
         {paymentType ? (
           <AddBankAccount
             bankName={state.bankName}
@@ -661,10 +671,10 @@ const AddAccountPage = () => {
           />
         )}
       </div>
-      <div class="flex w-full justify-center">
+      <div class="flex w-full justify-center cream">
         <p style={{ color: "red" }}>{errorMassage}</p>
       </div>
-      <div class="flex w-full justify-center">
+      <div class="flex w-full justify-center cream">
         <button
           class={isDisabled() ? invalidButtonClass : validButtonClass}
           onClick={onSubmit}
