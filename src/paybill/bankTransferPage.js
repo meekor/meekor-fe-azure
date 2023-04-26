@@ -166,7 +166,11 @@ const BankTransferPage = () => {
                       action: {
                         type: "uri",
                         label: "ตรวจเช็ค",
-                        uri: "http://linecorp.com/",
+                        uri:
+                          "https://liff.line.me/1657560711-7MgLg4Ld?confirm&billId=" +
+                          bill.id +
+                          "&groupId=" +
+                          bill.group_id,
                       },
                       color: "#f2bdcd",
                       style: "primary",
