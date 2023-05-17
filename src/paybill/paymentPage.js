@@ -150,7 +150,7 @@ const PaymentPage = () => {
                     setPaidMessage("รอการยืนยันจากเจ้าของบิลก่อนนะคร๊าบ");
                     // setMessage("invalid");
                   }
-                  else if (debtData.status == "pending") {
+                  else if (debtData.status == "close") {
                     console.log(true);
                     msgFlag = true;
                     setPaidMessage("พี่จ่ายบิลนี้ไปแล้วค้าบ");
