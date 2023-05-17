@@ -85,7 +85,7 @@ const confirmbillPage = () => {
       .then((res) => {
         console.log("Status set to close");
         console.log(res);
-        window.close();
+        liff.closeWindow();
       })
       .catch((error) => {
         console.error("ok button: " + error);

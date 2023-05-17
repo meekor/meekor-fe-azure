@@ -144,11 +144,16 @@ const PaymentPage = () => {
                   setUserDebtIndex(index);
 
                   // totalDebtAmount = debtData.amount;
-                  if (debtData.status === "pending") {
+                  if (debtData.status == "pending") {
                     console.log(true);
                     msgFlag = true;
-                    setPaidMessage("พี่จ่ายบิลนี้ไปแล้วน้า");
+                    setPaidMessage("รอการยืนยันจากเจ้าของบิลก่อนนะคร๊าบ");
                     // setMessage("invalid");
+                  }
+                  else if (debtData.status == "pending") {
+                    console.log(true);
+                    msgFlag = true;
+                    setPaidMessage("พี่จ่ายบิลนี้ไปแล้วค้าบ");
                   }
                 } else if (
                   index == response.data.data.debts.length - 1 &&
