@@ -17,7 +17,8 @@ const AddMemberPage = () => {
     console.log("yo");
     if (groupId) {
       axios
-        .get(`https://meekor.onrender.com/v1/group/${groupId}`)
+        .get(`https://meekor-be.azurewebsites.net/v1/group/${groupId}`)
+        // .get(`https://meekor.onrender.com/v1/group/${groupId}`)
         .then((res) => {
           console.log(res);
           //res.data.users -> list of user in the group

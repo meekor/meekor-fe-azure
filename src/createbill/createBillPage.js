@@ -128,7 +128,7 @@ const CreateBillPage = () => {
 
   return (
     <div>
-      <div className="flex flex-col h-full cream">
+      <div className="flex flex-col min-h-screen cream">
         <div className="flex w-screen h-32 min-h-1/5 pink rounded-b-3xl drop-shadow-lg">
           <div className="w-4/6">
             <h1 id="title" className="text-3xl font-bold text-white mt-4 ml-8">
@@ -250,16 +250,14 @@ const CreateBillPage = () => {
             // console.log('i==', i)
             return (
               <div key={x} className=" my-3 ml-8">
-                <div className="flex items-center w-screen">
+                <div className="flex items-center">
                   <div className="w-full mr-1">
                     <input
                       type="text"
                       name="name"
                       className="w-full shadow-inner border-2 border-gray-300 drop-shadow-md rounded-lg p-1"
                       placeholder="รายการ"
-                      onChange={(e) => {
-                        handleinputchange(e, i);
-                      }}
+                      onChange={(e) => handleinputchange(e, i)}
                     />
                   </div>
                   <div className="w-1/2 mx-1">
@@ -268,9 +266,7 @@ const CreateBillPage = () => {
                       name="price"
                       className="w-full border-2 b shadow-inner border-2 border-gray-300 drop-shadow-md rounded-lg p-1"
                       placeholder="ราคา"
-                      onChange={(e) => {
-                        handleinputchange(e, i);
-                      }}
+                      onChange={(e) => handleinputchange(e, i)}
                     />
                   </div>
                   <div className="w-1/3 ">
@@ -307,7 +303,7 @@ const CreateBillPage = () => {
             );
           })}
         </div>
-        <div className="my-1 mt-8 items-center w-screen mx-5">
+        <div className="my-1 mt-8 items-center mx-5">
           <div className="flex w-full my-2">
             <h1 className=" w-full p-1 text-lg  ml-3 font-medium">
               Service Charge

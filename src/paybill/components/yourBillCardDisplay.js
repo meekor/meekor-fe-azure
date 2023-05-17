@@ -4,7 +4,7 @@ import YourBillCard from "./yourBillCard.js";
 import axios from "axios";
 import React, { useState, useEffect, useRef, createRef } from "react";
 
-const YourBillCardDisplay = ({ groupId, userId }) => {
+const YourBillCardDisplay = ({ groupId, userId, userProfiles }) => {
   // TODO getting Line Group ID from the DB
   const [bills, setBills] = useState({});
   const [yourbills, setYourbills] = useState([]);
@@ -12,8 +12,8 @@ const YourBillCardDisplay = ({ groupId, userId }) => {
   const [debtData, setDebtData] = useState([]);
   // Then Get the Bills accoring to Group ID
   // const currentLineID = userId;
-  userId = "U9016c40faeef528b45f43a259f223bde";
-  groupId = "C1fe81d2a7d101b2578259505bd232573";
+  // userId = "U9016c40faeef528b45f43a259f223bde";
+  // groupId = "C1fe81d2a7d101b2578259505bd232573";
 
   // If the user id is matched with the debt then pass the value to JSON
   useEffect(() => {
@@ -45,11 +45,17 @@ const YourBillCardDisplay = ({ groupId, userId }) => {
   };
 
   const billcards = yourbills.map((bill) => {
-    return <YourBillCard key={bill.id} bill={bill}></YourBillCard>;
+    return (
+      <YourBillCard
+        key={bill.id}
+        bill={bill}
+        userProfiles={userProfiles}
+      ></YourBillCard>
+    );
   });
 
   return (
-    <div class overflow-y-auto>
+    <div className="w-3/4" overflow-y-auto>
       {billcards}
       {yourbills.forEach((bill) => {
         console.log(bill);

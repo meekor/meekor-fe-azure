@@ -82,7 +82,7 @@ const CashPayPage = () => {
                           "&groupId=" +
                           bill.group_id,
                       },
-                      color: "#f2bdcd",
+                      color: "#ff82a7",
                       style: "primary",
                       margin: "sm",
                     },

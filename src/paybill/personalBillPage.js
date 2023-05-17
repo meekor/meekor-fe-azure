@@ -3,15 +3,37 @@ import { useLiff } from "react-liff";
 import axios from "axios";
 import CardDisplay from "./components/cardDisplay.js";
 import YourBillCardDisplay from "./components/yourBillCardDisplay.js";
+import AllBillDisplay from "./components/allBillDisplay.js";
+
 const PersonalBillPage = () => {
   const queryParams = new URLSearchParams(location.search);
-  // const groupId = queryParams.get("groupId");
-  // const userId = queryParams.get("userId");
-  const userId = "U9016c40faeef528b45f43a259f223bde";
-  const groupId = "C1fe81d2a7d101b2578259505bd232573";
+  const [usersProfile, setUsersProfile] = useState({});
 
-  const [menu, setMenu] = useState(1);
+  const groupId = queryParams.get("groupId");
+  // const userId = queryParams.get("userId");
+  // const userId = "U9016c40faeef528b45f43a259f223bde";
+  // const groupId = "C1fe81d2a7d101b2578259505bd232573";
+
+  const [menu, setMenu] = useState(3);
   const [bills, setBills] = useState([]);
+
+  const [profile, setProfile] = useState({
+    userId: "Default",
+    displayName: "Default",
+  });
+
+  const { liff, isLoggedIn } = useLiff();
+
+  useEffect(() => {
+    if (!isLoggedIn) return;
+    if (liff.isInClient()) {
+      liff.getProfile().then((profile) => {
+        setProfile(profile);
+        console.log(profile);
+      });
+    }
+  }, [liff, isLoggedIn]);
+
   useEffect(() => {
     axios
       .get(` https://meekor.onrender.com/v1/group/${groupId}/bill`, {
@@ -28,54 +50,92 @@ const PersonalBillPage = () => {
       });
   }, []);
 
+  useEffect(() => {
+    if (groupId) {
+      axios
+        .get(`https://meekor-be.azurewebsites.net/v1/group/${groupId}`)
+        .then((res) => {
+          console.log(res);
+          //res.data.users -> list of user in the group
+          setUsersProfile(res.data.data.users);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, []);
+
   return (
-    <div>
-      <div class="flex flex-col h-full">
-        <div class=" w-screen h-32 min-h-1/5 bg-teal-400">
-          <h2>uid = {userId}</h2>
-          <div class="flex justify-center pink w-full">
-            <button
-              className="p-3 mr-4 text-black-800 underline underline-offset-2"
-              onClick={() => {
-                setMenu(1);
-              }}
-            >
-              บิลรอจ่าย
-            </button>
-            <button
-              className="p-3 mr-4 text-black-800 underline underline-offset-2"
-              onClick={() => {
-                setMenu(2);
-              }}
-            >
-              บิลของคุณ
-            </button>
-            <button
-              className="p-3 mr-4 text-black-800 underline underline-offset-2"
-              onClick={() => {
-                setMenu(3);
-              }}
-            >
-              บิลทั้งหมด
-            </button>
-          </div>
+    <div className=" h-full min-h-screen cream w-screen">
+      <div class="flex flex-col h-full ">
+        <div class="w-screen pink h-20 ">
+          <h1 class="font-bold text-3xl text-center text-white align-bottom py-4">
+            {" "}
+            รวมบิล
+          </h1>
         </div>
+        <div class="flex justify-center softpink w-full rounded-b-3xl">
+          <button
+            className={
+              menu == 1
+                ? "p-3 mr-4 text-red-800 underline underline-offset-2"
+                : "p-3 mr-4 hover:text-red-800 "
+            }
+            onClick={() => {
+              setMenu(1);
+            }}
+          >
+            บิลรอจ่าย
+          </button>
+          <button
+            className={
+              menu == 2
+                ? "p-3 mr-4 text-red-800 underline underline-offset-2"
+                : "p-3 mr-4 hover:text-red-800 "
+            }
+            onClick={() => {
+              setMenu(2);
+            }}
+          >
+            บิลของคุณ
+          </button>
+          <button
+            className={
+              menu == 3
+                ? "p-3 mr-4 text-red-800 underline underline-offset-2"
+                : "p-3 mr-4 hover:text-red-800 "
+            }
+            onClick={() => {
+              setMenu(3);
+            }}
+          >
+            บิลทั้งหมด
+          </button>
+        </div>
+        {/* <h2>uid = {userId}</h2> */}
         {menu == 1 && (
-          <div>
-            <CardDisplay groupId={groupId} userId={userId}></CardDisplay>
+          <div className="flex w-screen justify-center my-10">
+            <CardDisplay
+              groupId={groupId}
+              userId={profile.userId}
+              userProfiles={usersProfile}
+            ></CardDisplay>
           </div>
         )}
         {menu == 2 && (
-          <div>
+          <div className="flex w-screen justify-center my-10">
             <YourBillCardDisplay
               groupId={groupId}
-              userId={userId}
+              userId={profile.userId}
+              userProfiles={usersProfile}
             ></YourBillCardDisplay>
           </div>
         )}
         {menu == 3 && (
-          <div>
-            <CardDisplay groupId={groupId} userId={userId}></CardDisplay>
+          <div className="flex w-screen justify-center my-10">
+            <AllBillDisplay
+              groupId={groupId}
+              userId={profile.userId}
+              userProfiles={usersProfile}
+            ></AllBillDisplay>
           </div>
         )}
       </div>

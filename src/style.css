@@ -7,6 +7,11 @@ body {
   font-weight: 400;
   color: #694d43;
 }
+body,
+html {
+  height: 100%;
+  margin: 0;
+}
 /* @layer base {
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
@@ -14,6 +19,14 @@ body {
     margin: 0;
   }
 } */
+.background-container {
+  background-position: "center";
+  background-size: "cover";
+  background-repeat: "no-repeat";
+  width: "100vw";
+  height: "100vh";
+}
+
 .img-container {
   width: calc(100vw - 30px);
   height: fit-content;
@@ -63,6 +76,9 @@ input::-webkit-inner-spin-button {
 }
 .font-softbrown {
   color: #a37261;
+}
+.font-mint {
+  color: #7de1cf;
 }
 
 /* .checkbox-wrapper-18 .round {

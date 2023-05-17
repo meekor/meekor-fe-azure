@@ -20,7 +20,7 @@ const AddBankAccount = ({
   accountnumber,
 }) => {
   return (
-    <div class="w-full h-full cream grid grid-flow-row auto-rows-max p-5">
+    <div class="w-full h-full grid grid-flow-row auto-rows-max p-5">
       <h1 className="mt-6 text-lg text-medium">บัญชีธนาคาร </h1>
 
       <Select
@@ -28,7 +28,6 @@ const AddBankAccount = ({
         options={banklist}
         components={{ Option: IconOption }}
         onChange={handleSelectChange}
-        value={bankName}
       />
 
       {/* <select

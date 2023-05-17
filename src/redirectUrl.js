@@ -23,18 +23,19 @@ const RedirectUrl = () => {
     if (!isLoggedIn) return;
     liff.ready.then(() => {
       if (liff.isInClient()) {
-        liff
-          .init({
-            liffId: "1657560711-7MgLg4Ld",
-          })
-          .then(() => {
-            console.log("LIFF init succeeded.");
-            // setMessage("LIFF init succeeded.");
-          })
-          .catch((e) => {
-            console.log("LIFF init failed.");
-            // setMessage("LIFF init failed.");
-          });
+        // Try to not have more than one time init
+        // liff
+        //   .init({
+        //     liffId: "1657560711-7MgLg4Ld",
+        //   })
+        //   .then(() => {
+        //     console.log("LIFF init succeeded.");
+        //     // setMessage("LIFF init succeeded.");
+        //   })
+        // .catch((e) => {
+        //   console.log("LIFF init failed.");
+        //   // setMessage("LIFF init failed.");
+        // });
         liff.getProfile().then((profile) => {
           console.log(profile);
           setProfile(profile);
@@ -68,12 +69,13 @@ const RedirectUrl = () => {
     }
 
     if (searchParams.has("confirm")) {
-      const queryString = ""; //`?groupId=${groupId}`;
+      const billID = searchParams.get("billId");
+      const queryString = `?groupId=${groupId}&billId=${billID}`;
       navigate("/confirm" + queryString);
     }
 
     if (searchParams.has("summary")) {
-      const queryString = `?groupId=${groupId}&userId=${profile.userId}`;
+      const queryString = `?groupId=${groupId}`;
       navigate("/summary" + queryString);
     }
   }, [location.search, navigate]);

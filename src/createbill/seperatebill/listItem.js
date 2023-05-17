@@ -39,7 +39,7 @@ const ListItem = ({ passedData, passToParent, sendUserProfile }) => {
     //old pull api
     console.log("pullllll");
     axios
-      .get(`https://meekor.onrender.com/v1/group/${groupId}`, {
+      .get(`https://meekor-be.azurewebsites.net/v1/group/${groupId}`, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },

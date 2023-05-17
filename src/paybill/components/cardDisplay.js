@@ -5,7 +5,7 @@ import axios from "axios";
 import React, { useState, useEffect, useRef, createRef } from "react";
 // import { getUserProfile } from "../../lineApi.js";
 
-const CardDisplay = ({ groupId, userId }) => {
+const CardDisplay = ({ groupId, userId, userProfiles }) => {
   // TODO getting Line Group ID from the DB
   const [bill, setBill] = useState([]);
   const [debtData, setDebtData] = useState([]);
@@ -16,38 +16,37 @@ const CardDisplay = ({ groupId, userId }) => {
   const convertResponseBill = (response) => {
     let debtData = [];
     response.forEach((bill) => {
-      // let existingPayment = debtData.find(
-      //   (data) => data.payment.account_number === bill.payment.account_number
-      // );
-      // if (existingPayment) {
-      //   existingPayment.bill.push({
-      //     id: bill.id,
-      //     name: bill.name,
-      //     amount: getDebtAmount(bill.debts),
-      //   });
-      // } else {
-      // const userProfile =  getUserProfile(groupId, bill.owner_id);
-
-      // console.log(bill.debts);
       for (let debt in bill.debts) {
-        if (bill.debts[debt].user_id == currentLineID) {
+        if (
+          bill.debts[debt].user_id == currentLineID &&
+          bill.status != "close"
+        ) {
           debtData.push({
             owner_id: bill.owner_id,
-            owner_name: "gade", // Find the name of the owner by using liff api
+            owner_name: findOwnerName(bill.owner_id), // Find the name of the owner by using liff api
             payment: bill.payment,
-            bill: [
-              {
-                id: bill.id,
-                name: bill.name,
-                amount: getDebtAmount(bill.debts),
-              },
-            ],
+            bill: {
+              id: bill.id,
+              name: bill.name,
+              date: bill.created_at,
+              items: bill.items,
+              debts: bill.debts,
+              amount: getDebtAmount(bill.debts),
+            },
           });
         }
       }
     });
     setDebtData(debtData);
     // console.log(debtData);
+  };
+
+  const findOwnerName = (id) => {
+    const owner = userProfiles.find((profile) => profile.user_id === id);
+    if (owner) {
+      return owner.display_name;
+    }
+    return null;
   };
 
   // Unecessary loop; Will fix later
@@ -81,9 +80,9 @@ const CardDisplay = ({ groupId, userId }) => {
   }, []);
 
   return (
-    <div class overflow-y-auto>
+    <div className="w-3/4" overflow-y-auto>
       {debtData.map((data) => (
-        <DebtCard debtData={data}></DebtCard>
+        <DebtCard debtData={data} userProfiles={userProfiles}></DebtCard>
       ))}
     </div>
   );

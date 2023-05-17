@@ -26,11 +26,14 @@ import ConfirmbillPage from "./confirmbillPage.js";
 import AddMemberPage from "./createEqualBill/addMemberpage.js";
 import RedirectUrl from "./redirectUrl.js";
 import NotFound from "./notFoundPage.js";
+import BillDetails from "./paybill/billDetails.js";
 
 const liffId = "1657560711-7MgLg4Ld";
 const stubEnabled = false;
 
 const container = document.getElementById("root");
+// container.classList.add("no-scroll");
+// document.body.classList.add("no-scroll");
 const root = createRoot(container);
 root.render(
   <LiffProvider liffId={liffId} stubEnabled={stubEnabled}>
@@ -45,10 +48,11 @@ root.render(
         {/* <Route path="/" element={<PersonalBillPage />} /> */}
         {/* <Route path="/" element={<ConfirmbillPage />} /> */}
 
+        <Route path="/summary" element={<PersonalBillPage />} />
+
         <Route path="/confirm" element={<ConfirmPage />} />
         <Route path="/create_bill" element={<CreateBillPage />} />
         <Route path="/confirm_bill" element={<ConfirmbillPage />} />
-
         <Route path="/add_member" element={<AddMemberPage />} />
         <Route path="/separate_bill" element={<SeperateBill />} />
         {/* problem location */}
@@ -61,6 +65,7 @@ root.render(
 
         <Route path="/banktransfer" element={<BankTransferPage />} />
         <Route path="/cashpay" element={<CashPayPage />} />
+        <Route path="/billDetails" element={<BillDetails />} />
 
         <Route path="/equal_bill" element={<EqualBillPage />} />
         <Route path="*" element={<NotFound />} />

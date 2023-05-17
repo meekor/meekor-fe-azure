@@ -38,7 +38,7 @@ const EqualBillPage = () => {
   useEffect(
     () => {
       axios
-        .get(`https://meekor.onrender.com/v1/group/${groupId}`, {
+        .get(`https://meekor-be.azurewebsites.net/v1/group/${groupId}`, {
           headers: {
             "ngrok-skip-browser-warning": "3000",
           },
@@ -223,7 +223,7 @@ const EqualBillPage = () => {
   };
 
   return (
-    <div class="flex flex-col h-screen cream">
+    <div class="flex flex-col cream min-h-screen">
       <div class=" flex w-screen h-32 min-h-1/5 pink rounded-b-3xl drop-shadow-md">
         <div class="w-4/6 ">
           <h1

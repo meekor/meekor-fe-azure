@@ -338,7 +338,9 @@ const AddAccountPage = () => {
                     action: {
                       type: "uri",
                       label: "action",
-                      uri: "http://linecorp.com/",
+                      uri:
+                        "https://liff.line.me/1657560711-7MgLg4Ld?summary&groupId=" +
+                        groupId,
                     },
                     margin: "md",
                   },
@@ -610,7 +612,7 @@ const AddAccountPage = () => {
   };
 
   return (
-    <div className="h-screen cream">
+    <div className="cream min-h-screen">
       <div>
         <div class="w-full pink h-24 ">
           <h1 class="font-bold text-3xl text-center text-white align-bottom py-6">
@@ -653,7 +655,7 @@ const AddAccountPage = () => {
           </button>
         </div>
       </div>
-      <div className="flex justify-center mx-5 mb-4 cream">
+      <div className="flex justify-center mx-5 mb-4">
         {paymentType ? (
           <AddBankAccount
             bankName={state.bankName}
@@ -671,10 +673,10 @@ const AddAccountPage = () => {
           />
         )}
       </div>
-      <div class="flex w-full justify-center cream">
+      <div class="flex w-full justify-center">
         <p style={{ color: "red" }}>{errorMassage}</p>
       </div>
-      <div class="flex w-full justify-center cream">
+      <div class="flex w-full justify-center">
         <button
           class={isDisabled() ? invalidButtonClass : validButtonClass}
           onClick={onSubmit}

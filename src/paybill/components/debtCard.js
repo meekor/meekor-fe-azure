@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useLiff } from "react-liff";
 
-const DebtCard = ({ debtData }) => {
+const DebtCard = ({ debtData, userProfiles }) => {
   let owner = debtData.owner_name;
   const [billID, setBillID] = useState([]);
   const navigate = useNavigate();
@@ -29,42 +29,47 @@ const DebtCard = ({ debtData }) => {
 
   const goToPayment = () => {
     const queryString = `?billId=${encodeURIComponent(
-      JSON.stringify(debtData.bill[0].id)
+      JSON.stringify(debtData.bill.id)
     )}`;
     navigate("/payment" + queryString);
   };
 
+  const goToDetails = () => {
+    navigate("/billDetails", {
+      state: {
+        bill: debtData,
+        profiles: userProfiles,
+      },
+    });
+  };
+
   //Creating UL list components
-  let bill_list = debtData.bill.map((bill) => (
-    <ul>
-      <div class="block">
-        <div class="mt-2">
-          <label class="inline-flex items-center">
-            {/* <input
-              type="checkbox"
-              class="w-6 h-6 rounded"
-              value={checkbox_id++}
-              onChange={handleChange}
-            /> */}
-            {bill.name} {bill.amount}
-          </label>
-        </div>
-      </div>
-    </ul>
-  ));
+  let bill_list = (
+    <div class="flex ">
+      <h1 className="text-xl font-bold"> บิล {debtData.bill.name}</h1>
+      <h1 className="text-xl font-pink font-bold ml-auto">
+        {" "}
+        ฿ {debtData.bill.amount.toFixed(2)}
+      </h1>
+    </div>
+  );
 
   useEffect(() => {}, [billID]);
 
   return (
-    <div>
-      <div class="max-w-sm rounded overflow-hidden shadow-lg">
+    <div className="">
+      <div class="bg-white max-w-sm rounded-xl mb-5 overflow-hidden shadow-lg">
         <div class="px-6 py-4">
-          <div class="font-bold text-xl mb-2">บิลโดย {owner}</div>
-          <button > <u>ดูรายละเอียด </u></button>
-          <div>{bill_list}</div>
-          <div>
+          <div class="w-full  "> {bill_list}</div>
+          <h1 className="mt-2 mb-5 text-gray-700">เรียกเก็บโดย @{owner}</h1>
+          <div className="w-full flex flex-col justify-center">
+            <button onClick={goToDetails}>
+              {" "}
+              <u>ดูรายละเอียด </u>
+            </button>
+
             <button
-              class="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+              class="pink hover:bg-amber-800 text-white font-bold py-2 rounded mx-5 my-2"
               onClick={goToPayment}
             >
               จ่ายเงิน

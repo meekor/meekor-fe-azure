@@ -14,15 +14,12 @@ const confirmbillPage = () => {
   const userId = searchParams.get("userId");
   const name = searchParams.get("name");
   const amount = searchParams.get("amount");
-  console.log("Confirm");
-  console.log(location.state.slip);
+  //console.log("Confirm");
+  //console.log(location.state.slip);
+  const { liff } = useLiff();
 
-  // const [isConfirming, setIsConfirming] = useState(false);
-  // const [info, setInfo] = useState();
   const [debts, setDebts] = useState([]);
   const [bill, setBill] = useState({});
-  // const [users, setUsers] = useState([]);
-  // const [userDict, setUserDict] = useState({});
 
   useEffect(() => {
     axios
@@ -34,7 +31,6 @@ const confirmbillPage = () => {
       .then((response) => {
         console.log(response.data.data);
         setBill(response.data.data);
-        // setInfo(response.data.data.name);
         setDebts(response.data.data.debts);
       })
       .catch(function (error) {
@@ -42,44 +38,66 @@ const confirmbillPage = () => {
       });
   }, []);
 
-  //console.log(bill.name);
-  // const m = debts.forEach(function (entry) {
-  //   if (entry.user_id == userId) {
-  //     entry.status = "paid";
-  //   }
-  //   //console.log(entry.status);
-  // });
-  // console.log("NEW");
-  // console.log(debts);
-
   let images = [
     location.state.slip,
-    // "https://images.pexels.com/photos/1643457/pexels-photo-1643457.jpeg?auto=compress&cs=tinysrgb&w=600",
-    // "https://images.pexels.com/photos/3777622/pexels-photo-3777622.jpeg?auto=compress&cs=tinysrgb&w=600",
-    // "https://images.pexels.com/photos/1828875/pexels-photo-1828875.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/1643457/pexels-photo-1643457.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/3777622/pexels-photo-3777622.jpeg?auto=compress&cs=tinysrgb&w=600",
+    "https://images.pexels.com/photos/1828875/pexels-photo-1828875.jpeg?auto=compress&cs=tinysrgb&w=600",
   ];
 
-  const Card = {
-    height: "300px",
-    borderRadius: "10px",
-  };
-
-  const mystyle = {
-    alignItems: "center",
-    height: "100%",
-    textAlign: "center",
-  };
-
-  const onSubmit = async () => {
+  const handleCloseStatus = async () => {
+    //change debt status
     const m = debts.forEach(function (entry) {
       if (entry.user_id == userId) {
         entry.status = "close";
       }
-      //console.log(entry.status);
     });
 
-    //connect data
-    console.log("hi");
+    //close bill
+    let billStatus = bill.status;
+    const allclose = debts.every((debts) => debts.status === "close");
+    if (allclose) {
+      billStatus = "close";
+    }
+
+    const billObject = {
+      name: bill.name,
+      total: bill.total,
+      status: billStatus,
+      owner_id: bill.owner_id,
+      payment: {
+        update: {
+          qr_code: bill.payment.qr_code,
+          bank_info: bill.payment.bank_info,
+          account_name: bill.account_name,
+          account_number: bill.account_number,
+        },
+      },
+      debts: debts,
+      items: bill.items,
+    };
+    await axios
+      .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
+        headers: {
+          "ngrok-skip-browser-warning": "3000",
+        },
+      })
+      .then((res) => {
+        console.log("Status set to close");
+        console.log(res);
+        window.close();
+      })
+      .catch((error) => {
+        console.error("ok button: " + error);
+      });
+  };
+
+  const handleOpenStatus = async () => {
+    const m = debts.forEach(function (entry) {
+      if (entry.user_id == userId) {
+        entry.status = "open";
+      }
+    });
     const billObject = {
       name: bill.name,
       total: bill.total,
@@ -96,9 +114,6 @@ const confirmbillPage = () => {
       debts: debts,
       items: bill.items,
     };
-    //console.log(billObject);
-    console.log(debts);
-    //Save to DB....
     await axios
       .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
         headers: {
@@ -106,19 +121,94 @@ const confirmbillPage = () => {
         },
       })
       .then((res) => {
-        //res return photo id get from upload to imgur
-        console.log("yeah");
+        console.log("Status set to open");
         console.log(res);
-        //qr_url = res.data.qr_photo_id;
-        //resBillID = res.data.bill.id;
+        //window.close();
+        liff.closeWindow();
+      })
+      .catch((error) => {
+        console.error("close button: " + error);
       });
-    console.log("ki");
+
+    if (allclose) {
+      billStatus = "close";
+
+      const message = {
+        type: "flex",
+        altText: "Close bill",
+        contents: {
+          type: "bubble",
+          body: {
+            type: "box",
+            layout: "vertical",
+            spacing: "sm",
+            contents: [
+              {
+                type: "text",
+                text: "บิล" + name + " จ่ายบิลครบแล้ว",
+                wrap: true,
+                weight: "bold",
+                gravity: "center",
+                size: "xl",
+              },
+            ],
+          },
+        },
+      };
+      liff
+        .sendMessages([message])
+        .then(() => {
+          console.log("message sent");
+          liff.closeWindow();
+        })
+        .catch((err) => {
+          console.log("error sending message liff", err);
+        });
+    }
+  };
+
+  const Card = {
+    height: "300px",
+    borderRadius: "10px",
+    marginTop: "20px",
+  };
+
+  const mystyle = {
+    //alignItems: "center",
+    height: "100%",
+    //textAlign: "center",
+  };
+
+  const namestyle = {
+    color: "white",
+    backgroundColor: "rgba(255, 136, 158, 0.8)",
+    paddingLeft: "20px",
+    fontFamily: "Arial",
+    fontSize: "50px",
+  };
+  const price = {
+    color: "white",
+    backgroundColor: "rgba(255, 136, 158, 0.8)",
+    paddingLeft: "20px",
+    paddingBottom: "20px",
+    fontFamily: "Arial",
+    fontSize: "20px",
+    borderRadius: "0px 0px  20px 20px",
+  };
+  const buttonStyle = {
+    backgroundColor: "rgba(255, 136, 158, 1)",
+    color: "white",
+    width: "50%",
+    fontSize: "13px",
+    padding: "10px",
+    margin: "5px",
+    borderRadius: "10px",
   };
 
   return (
     <div>
-      <h1>{name}</h1>
-      <h1>฿ {amount}</h1>
+      <h1 style={namestyle}>{name}</h1>
+      <h1 style={price}>฿ {amount}</h1>
       <div style={mystyle}>
         <center>
           <Splide
@@ -136,14 +226,32 @@ const confirmbillPage = () => {
                 </SplideSlide>
               );
             })}
-            {/* <img src={location.state.slip} /> */}
           </Splide>
         </center>
       </div>
-      <button className="w-full" onClick={onSubmit}>
-        ยืนยันจ่ายแล้ว
-      </button>
-      <button className="w-full">ปฎิเสธ</button>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <button
+          style={buttonStyle}
+          className="w-full"
+          onClick={handleCloseStatus}
+        >
+          ยืนยันจ่ายแล้ว
+        </button>
+        <button
+          style={buttonStyle}
+          className="w-full"
+          onClick={handleOpenStatus}
+        >
+          ปฎิเสธ
+        </button>
+      </div>
     </div>
   );
 };

@@ -10,7 +10,7 @@ const PaymentPage = () => {
   const queryParams = new URLSearchParams(location.search);
   console.log(queryParams.get("billId"));
 
-  const [message, setMessage] = useState(false);
+  const [message, setMessage] = useState("loading");
 
   const billID = queryParams.get("billId");
 
@@ -92,6 +92,7 @@ const PaymentPage = () => {
   // };
 
   useEffect(() => {
+    console.log("---------updatep--------");
     if (!isLoggedIn) return;
     if (liff.isInClient()) {
       liff.getProfile().then((profile) => {
@@ -108,7 +109,7 @@ const PaymentPage = () => {
           });
         } else {
           axios
-            .get(`https://meekor.onrender.com/v1/bill/${billID}`, {
+            .get(`https://meekor-be.azurewebsites.net/v1/bill/${billID}`, {
               headers: {
                 "ngrok-skip-browser-warning": "3000",
               },
@@ -124,31 +125,43 @@ const PaymentPage = () => {
               setAccountName(response.data.data.payment.account_name);
 
               //see whether user that open is in debt list
+              let msgFlag = "loading";
               response.data.data.debts.forEach((debtData, index) => {
                 console.log(debtData);
 
                 console.log(
-                  "msg == true",
+                  "msg == ",
+                  message,
                   index,
                   response.data.data.debts.length - 1
                 );
                 if (debtData.user_id === profile.userId) {
                   console.log("matched");
+                  msgFlag = false;
+                  // setMessage(false);
+                  console.log("set message:", msgFlag);
                   setTotalDebtAmount(debtData.amount);
                   setUserDebtIndex(index);
+
                   // totalDebtAmount = debtData.amount;
-                  setMessage(false);
                   if (debtData.status === "pending") {
+                    console.log(true);
+                    msgFlag = true;
                     setPaidMessage("พี่จ่ายบิลนี้ไปแล้วน้า");
-                    setMessage(true);
+                    // setMessage("invalid");
                   }
                 } else if (
-                  index == response.data.data.debts.length &&
-                  message == "loading"
+                  index == response.data.data.debts.length - 1 &&
+                  msgFlag == "loading"
+                  // message == "loading"
                 ) {
-                  setMessage(true);
+                  msgFlag = true;
+                  // setMessage(true);
+                  console.log("index = " + index);
+                  console.log("invalid");
                 }
               });
+              setMessage(msgFlag);
 
               //if promptpay get qr of the promptpay
               if (response.data.data.payment.bank_info == "PromptPay") {
