@@ -144,7 +144,7 @@ const PaymentPage = () => {
                   setUserDebtIndex(index);
 
                   // totalDebtAmount = debtData.amount;
-                  if (debtData.status === "pending") {
+                  if (debtData.status !== "open") {
                     console.log(true);
                     msgFlag = true;
                     setPaidMessage("พี่จ่ายบิลนี้ไปแล้วน้า");
