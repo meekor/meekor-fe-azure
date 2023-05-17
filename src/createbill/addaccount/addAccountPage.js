@@ -111,21 +111,15 @@ const AddAccountPage = () => {
     // console.log("payusers " + name);
     let amount = 0;
     const i = list.forEach(function (entry) {
-      //const newlist = [];
-      //var result = Object.entries(entry.id);
-      //console.log("result = " + result);
-      //if(entry.id.values.includes(name)){
-      // console.log(name + " in " + result);
-      //}
-      //console.log(Object.values(entry)[0]);
-      //console.log("--");
+
       if (Object.values(entry)[0].includes(name)) {
         amount = amount + Number(entry.ppm);
       }
       amount;
     });
     // console.log(name + " dpm :" + amount);
-    const dept = { user_id: name, amount: amount, status: "open" };
+    
+    const dept = { user_id: name, amount: amount, status: name == location.state.bill.owner_id ? "closed" : "open" };
     Deptlist.push(dept);
   });
 
