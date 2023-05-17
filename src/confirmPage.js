@@ -132,7 +132,7 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
       .then((res) => {
         console.log("Status set to close");
         console.log(res);
-        //window.location.reload(false);
+        window.location.reload(false);
       })
       .catch((error) => {
         console.error("ok button: " + error);
