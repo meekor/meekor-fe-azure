@@ -90,6 +90,42 @@ const confirmbillPage = () => {
       .catch((error) => {
         console.error("ok button: " + error);
       });
+
+      if (allclose) {
+        billStatus = "close";
+  
+        const message = {
+          type: "flex",
+          altText: "Close bill",
+          contents: {
+            type: "bubble",
+            body: {
+              type: "box",
+              layout: "vertical",
+              spacing: "sm",
+              contents: [
+                {
+                  type: "text",
+                  text: "บิล" + name + " จ่ายบิลครบแล้ว",
+                  wrap: true,
+                  weight: "bold",
+                  gravity: "center",
+                  size: "xl",
+                },
+              ],
+            },
+          },
+        };
+        liff
+          .sendMessages([message])
+          .then(() => {
+            console.log("message sent");
+            liff.closeWindow();
+          })
+          .catch((err) => {
+            console.log("error sending message liff", err);
+          });
+      }
   };
 
   const handleOpenStatus = async () => {
@@ -130,41 +166,6 @@ const confirmbillPage = () => {
         console.error("close button: " + error);
       });
 
-    if (allclose) {
-      billStatus = "close";
-
-      const message = {
-        type: "flex",
-        altText: "Close bill",
-        contents: {
-          type: "bubble",
-          body: {
-            type: "box",
-            layout: "vertical",
-            spacing: "sm",
-            contents: [
-              {
-                type: "text",
-                text: "บิล" + name + " จ่ายบิลครบแล้ว",
-                wrap: true,
-                weight: "bold",
-                gravity: "center",
-                size: "xl",
-              },
-            ],
-          },
-        },
-      };
-      liff
-        .sendMessages([message])
-        .then(() => {
-          console.log("message sent");
-          liff.closeWindow();
-        })
-        .catch((err) => {
-          console.log("error sending message liff", err);
-        });
-    }
   };
 
   const Card = {
