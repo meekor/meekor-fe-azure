@@ -119,7 +119,7 @@ const AddAccountPage = () => {
     });
     // console.log(name + " dpm :" + amount);
     
-    const dept = { user_id: name, amount: amount, status: name == location.state.bill.owner_id ? "closed" : "open" };
+    const dept = { user_id: name, amount: amount, status: name == location.state.bill.owner_id ? "close" : "open" };
     Deptlist.push(dept);
   });
 
