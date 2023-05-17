@@ -9,13 +9,13 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
   const location = useLocation();
 
   const searchParams = new URLSearchParams(location.search);
-  // const billId = searchParams.get("billId");
-  // const groupId = searchParams.get("groupId");
+  const billId = searchParams.get("billId");
+  const groupId = searchParams.get("groupId");
   // const billId = 20;
   // const groupId = "C1fe81d2a7d101b2578259505bd232573";
 
-  const billId = 102;
-  const groupId = "C5c5702e477f75f7e73a055630b867650";
+  // const billId = 102;
+  // const groupId = "C5c5702e477f75f7e73a055630b867650";
 
   const [info, setInfo] = useState();
   const [debts, setDebts] = useState([]);
