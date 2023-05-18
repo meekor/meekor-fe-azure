@@ -12,7 +12,7 @@ const BillDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    let bill = location.state.bill.bill;
+    let bill = location.state.bill;
     console.log(location.state.profiles);
     console.log(bill);
 
@@ -222,7 +222,7 @@ const BillDetails = () => {
       {unpaid.length !== 0 && <div>{unpaidDiv}</div>}
       {pending.length !== 0 && <div>{pendingDiv}</div>}
       {paid.length !== 0 && <div>{paidDiv}</div>}
-      {isVisible && (
+      {
         <div className=" w-3/4 ml-6 flex justify-center mb-16">
           <button
             class=" brown rounded-xl p-2  text-white flex justify-center  w-1/3 items-center"
@@ -248,7 +248,7 @@ const BillDetails = () => {
             จ่ายเงิน
           </button>
         </div>
-      )}
+      }
     </div>
   );
 };

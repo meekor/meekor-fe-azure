@@ -146,6 +146,9 @@ const YourBillCard = ({ bill, userProfiles }) => {
       .catch((err) => {
         console.log("error sending message liff", err);
       });
+
+    window.alert("ทวงแล้ว");
+    window.location.reload(false);
   };
 
   useEffect(() => {
@@ -199,6 +202,8 @@ const YourBillCard = ({ bill, userProfiles }) => {
         .catch(function (error) {
           console.log(error);
         });
+
+      window.alert("ลบบิลแล้ว");
 
       const message = [
         {
@@ -291,6 +296,7 @@ const YourBillCard = ({ bill, userProfiles }) => {
           console.log("error sending message liff", err);
         });
     }
+    window.location.reload(false);
   };
 
   return (

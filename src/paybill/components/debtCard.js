@@ -37,7 +37,7 @@ const DebtCard = ({ debtData, userProfiles }) => {
   const goToDetails = () => {
     navigate("/billDetails", {
       state: {
-        bill: debtData,
+        bill: debtData.bill,
         profiles: userProfiles,
       },
     });

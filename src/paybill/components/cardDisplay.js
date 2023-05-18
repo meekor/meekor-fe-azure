@@ -16,9 +16,11 @@ const CardDisplay = ({ groupId, userId, userProfiles }) => {
   const convertResponseBill = (response) => {
     let debtData = [];
     response.forEach((bill) => {
+      console.log(bill);
       for (let debt in bill.debts) {
         if (
           bill.debts[debt].user_id == currentLineID &&
+          bill.debts[debt].status == "open" &&
           bill.status != "close"
         ) {
           debtData.push({
