@@ -36,12 +36,13 @@ const YourBillCard = ({ bill, userProfiles }) => {
             type: "text",
             text: "@" + findOwnerName(debt.user_id),
             color: "#694d43",
-            "decoration": "line-through"
+            decoration: "line-through"
           },
           {
             type: "text",
             text: "" + debt.amount.toFixed(2) + " Bath",
             align: "end",
+            decoration: "line-through",
           },
         ] ,
       };
