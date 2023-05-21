@@ -17,7 +17,8 @@ const YourBillCard = ({ bill, userProfiles }) => {
       return {
         type: "box",
         layout: "horizontal",
-        contents: [
+        contents: debt.status=="open" ?  [
+          // if debt is not paid
           {
             type: "text",
             text: "@" + findOwnerName(debt.user_id),
@@ -28,7 +29,21 @@ const YourBillCard = ({ bill, userProfiles }) => {
             text: "" + debt.amount.toFixed(2) + " Bath",
             align: "end",
           },
-        ],
+        ] :
+        // if debt is paid or pending then return striking name
+        [
+          {
+            type: "text",
+            text: "@" + findOwnerName(debt.user_id),
+            color: "#694d43",
+            "decoration": "line-through"
+          },
+          {
+            type: "text",
+            text: "" + debt.amount.toFixed(2) + " Bath",
+            align: "end",
+          },
+        ] ,
       };
     });
     const message = [
@@ -183,6 +198,15 @@ const YourBillCard = ({ bill, userProfiles }) => {
     navigate("/confirm" + queryString);
   };
 
+  const goToDetails = () => {
+    navigate("/billDetails", {
+      state: {
+        bill: bill,
+        profiles: userProfiles,
+      },
+    });
+  };
+
   const deleteBill = async () => {
     const confirmDelete = window.confirm("ยืนยันจะลบบิลนี้หรือไม่");
 
@@ -309,6 +333,10 @@ const YourBillCard = ({ bill, userProfiles }) => {
           </h1>
         </div>
         <div class="px-6 py-4">
+          <button onClick={goToDetails}>
+            {" "}
+            <u>ดูรายละเอียด </u>
+          </button>
           <div>
             <h1 className="text-lg font-semibold">ยังไม่ได้จ่าย</h1>
             {unpaid.map((debt) => {
