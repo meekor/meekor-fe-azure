@@ -367,6 +367,11 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
   //confirm payment and close dept status, close bill status: pennding-->close
   const handleCloseStatus = async (userid) => {
     //close dept status
+    let isConfirm = window.confirm("ยืนยันการจ่าย");
+    if (!isConfirm) {
+      return 0;
+    }
+
     const m = debts.forEach(function (entry) {
       if (entry.user_id == userid) {
         entry.status = "close";
@@ -403,11 +408,15 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
     };
 
     await axios
-      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
-        headers: {
-          "ngrok-skip-browser-warning": "3000",
-        },
-      })
+      .put(
+        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+        billObject,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "3000",
+          },
+        }
+      )
       .then((res) => {
         console.log("Dept status set to close");
         //console.log("allclose:" + allclose);
@@ -425,6 +434,10 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
   //Not confirm payment dept status: pending --> open
   const handleOpenStatus = async (userid) => {
     //open dept status
+    let isConfirm = window.confirm("ปฏิเสธการจ่าย");
+    if (!isConfirm) {
+      return 0;
+    }
     const m = debts.forEach(function (entry) {
       if (entry.user_id == userid) {
         entry.status = "open";
@@ -452,11 +465,15 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
 
     //update bill
     await axios
-      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
-        headers: {
-          "ngrok-skip-browser-warning": "3000",
-        },
-      })
+      .put(
+        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+        billObject,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "3000",
+          },
+        }
+      )
       .then((res) => {
         console.log("Status set to open");
         console.log(res);
