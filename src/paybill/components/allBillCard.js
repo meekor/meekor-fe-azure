@@ -27,7 +27,7 @@ const DebtCard = ({ debtData, userProfiles }) => {
     });
   };
 
-  useEffect(() => {}, [billID]);
+  useEffect(() => { }, [billID]);
 
   return (
     <div>

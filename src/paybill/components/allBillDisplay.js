@@ -90,15 +90,15 @@ const AllBillDisplay = ({ groupId, userId, userProfiles }) => {
       .catch(function (error) {
         console.log(error);
       });
-  }, [, selectedMonth]);
+  }, [debtData, selectedMonth]);
 
   return (
-    <div className="w-full ">
-      <div className="">
-        <div className="mb-4 w-full flex ml-5">
-          รวมยอดเดือน
+    <div className="max-w-screen">
+      <div className="mb-4 max-w-screen flex justify-between px-4">
+        <div className="">
+          เดือน
           <select
-            className=" border-none rounded-lg bg-transparent bg-none drop-shadow-none ml-2 text-red-900"
+            className=" border-2 border-red-900 rounded-lg cream bg-none drop-shadow-none ml-2 text-red-900"
             value={selectedMonth}
             onChange={handleMonthSelect}
           >
@@ -110,10 +110,10 @@ const AllBillDisplay = ({ groupId, userId, userProfiles }) => {
               </option>
             ))}
           </select>
-          <span className=" text-lg font-mint font-semibold">
-            {totalSpend} บาท
-          </span>
         </div>
+        <span className=" text-lg font-pink font-semibold">
+          {totalSpend} บาท
+        </span>
       </div>
       <div className="flex w-screen justify-center">
         <div className="w-3/4" overflow-y-auto>

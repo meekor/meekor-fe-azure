@@ -5,7 +5,8 @@ import axios from "axios";
 
 const EqualBillPage = () => {
   const location = useLocation();
-  console.log("EqualBill Page state" + JSON.stringify(location.state));
+  const navigate = useNavigate();
+
   const selectedMember = location.state.checked;
   const groupId = location.state.groupId;
   const usersProfile = location.state.usersProfile;
@@ -209,10 +210,28 @@ const EqualBillPage = () => {
   };
 
   const onSubmit = () => {
-    console.log(billName, billTotal, debtorList);
+    navigate("/add_account", {
+      state: {
+        bill: {
+          billTitle: billName,
+          itemList: [{ name: "", price: billTotal, users: selectedMember }],
+          vat: 0,
+          serviceCharge: 0,
+          discount: 0,
+          owner_id: profile.userId,
+          owner_name: profile.displayName,
+          groupId: location.state.groupId,
+        },
+        usersProfile: location.state.usersProfile,
+      },
+    });
   };
+  const validButton =
+    "w-2/3 p-3 px-10 pink my-16 rounded-xl drop-shadow-md hover:bg-pink-500 text-white text-md font-normal";
+  const invalidButton =
+    "w-2/3 p-3 px-10 my-16 rounded-xl drop-shadow-md bg-gray-500 text-white text-md font-normal";
 
-  const formValidaition = () => {
+  const isDisabled = () => {
     if (!billName || isNaN(billTotal)) {
       // TODO --- alert modal "กรอกข้อมูลไม่ครบ"
       console.log("Form is invalid");
@@ -394,33 +413,14 @@ const EqualBillPage = () => {
         </div>
       </div>
       <div class="flex justify-center w-screen">
-        <Link
-          to="/add_account"
-          class="w-3/4 flex justify-center"
-          state={{
-            // TODO:----- pass billInfo to addAccount page
-            bill: {
-              billTitle: billName,
-              itemList: [{ name: "", price: billTotal, users: selectedMember }],
-              vat: 0,
-              serviceCharge: 0,
-              discount: 0,
-              owner_id: profile.userId,
-              owner_name: profile.displayName,
-              groupId: location.state.groupId,
-            },
-            usersProfile: location.state.usersProfile,
-          }}
+        <button
+          className={isDisabled() ? invalidButton : validButton}
+          // note: disable works fine but style on tailwind is not
+          disabled={isDisabled()}
+          onClick={() => onSubmit()}
         >
-          <button
-            class="w-2/3 p-3 px-10 pink my-16 rounded-xl drop-shadow-md hover:bg-pink-500 disabled:bg-gray-300 text-white"
-            // note: disable works fine but style on tailwind is not
-            disabled={!billName || isNaN(billTotal)}
-            onClick={() => onSubmit()}
-          >
-            เพิ่มบัญชี
-          </button>
-        </Link>
+          เพิ่มบัญชี
+        </button>
       </div>
     </div>
   );

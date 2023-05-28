@@ -17,12 +17,80 @@ const AddAccountPage = () => {
     return acc;
   }, {});
 
+  const bankList = [
+    {
+      value: "SCB",
+      label: "ไทยพานิชย์",
+      logo: "https://meekor.blob.core.windows.net/misc/SCB.png",
+    },
+    {
+      value: "KBANK",
+      label: "กสิกรไทย",
+      logo: "https://meekor.blob.core.windows.net/misc/KBANK.png",
+    },
+    {
+      value: "BBL",
+      label: "กรุงเทพ",
+      logo: "https://meekor.blob.core.windows.net/misc/BBL.png",
+    },
+    {
+      value: "KTB",
+      label: "กรุงไทย",
+      logo: "https://meekor.blob.core.windows.net/misc/KTB.png",
+    },
+    {
+      value: "BAY",
+      label: "กรุงศรี",
+      logo: "https://meekor.blob.core.windows.net/misc/BAY.png",
+    },
+    {
+      value: "TTB",
+      label: "ทีเอ็มบีธนชาต",
+      logo: "https://meekor.blob.core.windows.net/misc/TTB.png",
+    },
+    {
+      value: "KK",
+      label: "เกรียตินาคิน",
+      logo: "https://meekor.blob.core.windows.net/misc/kk.png",
+    },
+    {
+      value: "TISCO",
+      label: "ทิสโก้",
+      logo: "https://meekor.blob.core.windows.net/misc/tisco.png",
+    },
+    {
+      value: "CIMBT",
+      label: "ซีไอเอมบี",
+      logo: "https://meekor.blob.core.windows.net/misc/cimb.png",
+    },
+    {
+      value: "LH",
+      label: "แลนด์ แอนด์ เฮ้าส์",
+      logo: "https://meekor.blob.core.windows.net/misc/lh.png",
+    },
+    {
+      value: "UOB",
+      label: "ยูโอบี",
+      logo: "https://meekor.blob.core.windows.net/misc/UOB.png",
+    },
+    {
+      value: "BACC",
+      label: "การเกษตรและสหกรณ์",
+      logo: "https://meekor.blob.core.windows.net/misc/BAAC.png",
+    },
+    {
+      value: "GSB",
+      label: "ออมสิน",
+      logo: "https://meekor.blob.core.windows.net/misc/GSB.png",
+    },
+  ];
+
   console.log(billInfo);
 
   const [state, setState] = useState({
     accName: "",
     accNum: "",
-    bankName: null,
+    bankName: bankList[0].value,
   });
 
   const { liff } = useLiff();
@@ -111,15 +179,18 @@ const AddAccountPage = () => {
     // console.log("payusers " + name);
     let amount = 0;
     const i = list.forEach(function (entry) {
-
       if (Object.values(entry)[0].includes(name)) {
         amount = amount + Number(entry.ppm);
       }
       amount;
     });
     // console.log(name + " dpm :" + amount);
-    
-    const dept = { user_id: name, amount: amount, status: name == location.state.bill.owner_id ? "close" : "open" };
+
+    const dept = {
+      user_id: name,
+      amount: amount,
+      status: name == location.state.bill.owner_id ? "close" : "open",
+    };
     Deptlist.push(dept);
   });
 
@@ -166,438 +237,377 @@ const AddAccountPage = () => {
     if (state.accNum.lenght > 13) {
       setErrorMassage("no more than 13 digits");
     }
-    console.log(state.accNum);
-    let qr_url = "";
-    let sum = calSum();
 
-    // ************* need to have group ID this is static***
-    // const groupId = "C1fe81d2a7d101b2578259505bd232573";
-    // *****************************************************
-    let resBillID = "";
-    let date = "";
-    const groupId = location.state.bill.groupId;
+    let isConfirm = window.confirm("ยืนยันการสร้างบิล?");
+    if (isConfirm) {
+      console.log(state.accNum);
+      let qr_url = "";
+      let sum = calSum();
 
-    //connect data
-    console.log(Deptlist);
-    const billObject = {
-      group_id: location.state.bill.groupId,
-      name: location.state.bill.billTitle,
-      total: sum,
-      status: "open",
-      owner_id: location.state.bill.owner_id,
-      payment: {
-        // qr_code: "qr.png",
-        bank_info: state.bankName,
-        account_name: state.accName,
-        account_number: state.accNum,
-      },
-      debts: Deptlist,
-      items: location.state.bill.itemList,
-    };
-    console.log(billObject);
+      // ************* need to have group ID this is static***
+      // const groupId = "C1fe81d2a7d101b2578259505bd232573";
+      // *****************************************************
+      let resBillID = "";
+      let date = "";
+      const groupId = location.state.bill.groupId;
 
-    //Save to DB....
-    // response = {"bill": {bill information},"qr_photo_id": ""}
-    await axios
-      .post(
-        `https://meekor-be.azurewebsites.net/v1/group/${groupId}/bill`,
-        billObject,
+      //connect data
+      console.log(Deptlist);
+      const billObject = {
+        group_id: location.state.bill.groupId,
+        name: location.state.bill.billTitle,
+        total: sum,
+        status: "open",
+        owner_id: location.state.bill.owner_id,
+        payment: {
+          // qr_code: "qr.png",
+          bank_info: state.bankName,
+          account_name: state.accName,
+          account_number: state.accNum,
+        },
+        debts: Deptlist,
+        items: location.state.bill.itemList,
+      };
+      console.log(billObject);
+
+      //Save to DB....
+      // response = {"bill": {bill information},"qr_photo_id": ""}
+      await axios
+        .post(
+          `https://meekor-be.azurewebsites.net/v1/group/${groupId}/bill`,
+          billObject,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "3000",
+            },
+          }
+        )
+        .then((res) => {
+          //res return photo id get from upload to imgur
+          console.log("loggin result from post bill...");
+          console.log(res);
+          qr_url = res.data.qr_photo_id;
+          resBillID = res.data.bill.id;
+          date = new Date(res.data.bill.created_at).toLocaleDateString();
+        });
+
+      //send into line
+      const userList = Deptlist.map((debt) => {
+        return {
+          type: "box",
+          layout: "horizontal",
+          contents: [
+            {
+              type: "text",
+              text: "@" + userDict[debt.user_id],
+              color: "#694d43",
+            },
+            {
+              type: "text",
+              text: "" + debt.amount.toFixed(2) + " Bath",
+              align: "end",
+            },
+          ],
+        };
+      });
+      console.log(date);
+      const message = [
         {
-          headers: {
-            "ngrok-skip-browser-warning": "3000",
-          },
-        }
-      )
-      .then((res) => {
-        //res return photo id get from upload to imgur
-        console.log("loggin result from post bill...");
-        console.log(res);
-        qr_url = res.data.qr_photo_id;
-        resBillID = res.data.bill.id;
-        date = new Date(res.data.bill.created_at).toLocaleDateString();
-      });
-
-    //send into line
-    const userList = Deptlist.map((debt) => {
-      return {
-        type: "box",
-        layout: "horizontal",
-        contents: [
-          {
-            type: "text",
-            text: "@" + userDict[debt.user_id],
-            color: "#694d43",
-          },
-          {
-            type: "text",
-            text: "" + debt.amount.toFixed(2) + " Bath",
-            align: "end",
-          },
-        ],
-      };
-    });
-    console.log(date);
-    const message = [
-      {
-        type: "flex",
-        altText: "flex message",
-        contents: {
-          type: "bubble",
-          body: {
-            type: "box",
-            layout: "vertical",
-            spacing: "sm",
-            contents: [
-              {
-                type: "text",
-                text: "หมีขอ",
-                wrap: true,
-                weight: "bold",
-                gravity: "center",
-                size: "lg",
-              },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "none",
-                spacing: "sm",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    spacing: "none",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "เรียกเก็บโดย " + billInfo.owner_name,
-                        wrap: false,
-                        size: "md",
-                        color: "#666666",
-                        margin: "none",
-                      },
-                    ],
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    spacing: "none",
-                    contents: [
-                      {
-                        type: "text",
-                        text: date,
-                        wrap: false,
-                        size: "md",
-                        color: "#666666",
-                        margin: "none",
-                      },
-                    ],
-                  },
-                  {
-                    type: "box",
-                    layout: "vertical",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "บิล " + billInfo.billTitle,
-                        color: "#ff82a7",
-                        size: "lg",
-                        weight: "bold",
-                      },
-                      {
-                        type: "box",
-                        layout: "vertical",
-                        margin: "lg",
-                        spacing: "xs",
-                        contents: userList,
-                      },
-                    ],
-                    margin: "md",
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "vertical",
-                contents: [
-                  {
-                    type: "separator",
-                    color: "#9F8170",
-                    margin: "md",
-                  },
-                  {
-                    type: "text",
-                    text: "ดูบิลทั้งหมด",
-                    color: "#9F8170",
-                    align: "center",
-                    action: {
-                      type: "uri",
-                      label: "action",
-                      uri:
-                        "https://liff.line.me/1657560711-7MgLg4Ld?summary&groupId=" +
-                        groupId,
+          type: "flex",
+          altText: "flex message",
+          contents: {
+            type: "bubble",
+            body: {
+              type: "box",
+              layout: "vertical",
+              spacing: "sm",
+              contents: [
+                {
+                  type: "text",
+                  text: "หมีขอ",
+                  wrap: true,
+                  weight: "bold",
+                  gravity: "center",
+                  size: "lg",
+                },
+                {
+                  type: "box",
+                  layout: "vertical",
+                  margin: "none",
+                  spacing: "sm",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      spacing: "none",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "เรียกเก็บโดย " + billInfo.owner_name,
+                          wrap: false,
+                          size: "md",
+                          color: "#666666",
+                          margin: "none",
+                        },
+                      ],
                     },
-                    margin: "md",
-                  },
-                  {
-                    type: "button",
-                    action: {
-                      type: "uri",
-                      label: "จ่ายเงิน",
-                      uri:
-                        "https://liff.line.me/1657560711-7MgLg4Ld?payment&billId=" +
-                        resBillID,
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      spacing: "none",
+                      contents: [
+                        {
+                          type: "text",
+                          text: date,
+                          wrap: false,
+                          size: "md",
+                          color: "#666666",
+                          margin: "none",
+                        },
+                      ],
                     },
-                    color: "#ff82a7",
-                    style: "primary",
-                    margin: "sm",
-                  },
-                ],
-              },
-            ],
-          },
-        },
-
-        // {
-        //   type: "bubble",
-        //   body: {
-        //     type: "box",
-        //     layout: "vertical",
-        //     contents: [
-        //       {
-        //         type: "text",
-        //         text: "หมีขอ",
-        //         margin: "none",
-        //         color: "#009900",
-        //         size: "sm",
-        //       },
-        //       {
-        //         type: "text",
-        //         text: billInfo.billTitle,
-        //         weight: "bold",
-        //         size: "xxl",
-        //         margin: "md",
-        //       },
-        //       {
-        //         type: "text",
-        //         text: "เรียกเก็บโดย " + billInfo.owner_name,
-        //       },
-        //       {
-        //         type: "separator",
-        //         margin: "lg",
-        //       },
-        //       {
-        //         type: "box",
-        //         layout: "vertical",
-        //         margin: "lg",
-        //         spacing: "xs",
-        //         contents: userList,
-        //       },
-        //     ],
-        //   },
-        //   footer: {
-        //     type: "box",
-        //     layout: "vertical",
-        //     spacing: "sm",
-        //     contents: [
-        //       {
-        //         type: "button",
-        //         style: "primary",
-        //         height: "sm",
-        //         action: {
-        //           type: "uri",
-        //           label: "จ่ายเงิน",
-        //           uri:
-        //             "https://liff.line.me/1657560711-7MgLg4Ld?payment&billId=" +
-        //             resBillID,
-        //         },
-        //       },
-        //     ],
-        //   },
-        // },
-      },
-    ];
-
-    //send bill summary message
-    await liff
-      .sendMessages(message)
-      .then(() => {
-        console.log("message sent");
-      })
-      .catch((err) => {
-        console.log("error sending message liff", err);
-      });
-
-    //if it is prompay payment method, send qr code to the group
-    if (state.bankName === "PromptPay") {
-      //get url from imgur formular
-      //----old imgur code--------
-      // await axios
-      //   .get(
-      //     `https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=1236e4750335db77007ca4721f9b9caa&photo_id=${imgur_photo_id}&format=json&nojsoncallback=1`
-      //   )
-      //   .then((res) => {
-      //     const qr_images = res.data.sizes.size;
-      //     qr_url = qr_images[3].source;
-      //     qr_thumb_url = qr_images[2].source;
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log("Can not get image url");
-      //     console.err(err);
-      //   });
-      const qr_message = {
-        type: "flex",
-        altText: "flex message",
-        contents: {
-          type: "bubble",
-          body: {
-            type: "box",
-            layout: "vertical",
-            spacing: "md",
-            contents: [
-              {
-                type: "text",
-                text: billInfo.billTitle,
-                wrap: true,
-                weight: "bold",
-                gravity: "center",
-                size: "xl",
-              },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "lg",
-                spacing: "sm",
-                contents: [
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    spacing: "sm",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "สร้างบิลสำเร็จแล้ว",
-                        wrap: true,
-                        size: "sm",
-                        color: "#666666",
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "บิล " + billInfo.billTitle,
+                          color: "#ff82a7",
+                          size: "lg",
+                          weight: "bold",
+                        },
+                        {
+                          type: "box",
+                          layout: "vertical",
+                          margin: "lg",
+                          spacing: "xs",
+                          contents: userList,
+                        },
+                      ],
+                      margin: "md",
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "vertical",
+                  contents: [
+                    {
+                      type: "separator",
+                      color: "#9F8170",
+                      margin: "md",
+                    },
+                    {
+                      type: "text",
+                      text: "ดูบิลทั้งหมด",
+                      color: "#9F8170",
+                      align: "center",
+                      action: {
+                        type: "uri",
+                        label: "action",
+                        uri:
+                          "https://liff.line.me/1657560711-7MgLg4Ld?summary&groupId=" +
+                          groupId,
                       },
-                    ],
-                  },
-                  {
-                    type: "box",
-                    layout: "baseline",
-                    spacing: "sm",
-                    contents: [
-                      {
-                        type: "text",
-                        text: "สามารถสแกน Qr จ่ายได้เลย",
-                        color: "#aaaaaa",
-                        size: "sm",
+                      margin: "md",
+                    },
+                    {
+                      type: "button",
+                      action: {
+                        type: "uri",
+                        label: "จ่ายเงิน",
+                        uri:
+                          "https://liff.line.me/1657560711-7MgLg4Ld?payment&billId=" +
+                          resBillID,
                       },
-                    ],
-                  },
-                ],
-              },
-              {
-                type: "box",
-                layout: "vertical",
-                margin: "xxl",
-                contents: [
-                  {
-                    type: "image",
-                    url: qr_url,
-                    aspectMode: "cover",
-                    size: "full",
-                    margin: "md",
-                  },
-                ],
-              },
-            ],
+                      color: "#ff82a7",
+                      style: "primary",
+                      margin: "sm",
+                    },
+                  ],
+                },
+              ],
+            },
           },
-        },
-      };
 
-      //send qr code
+          // {
+          //   type: "bubble",
+          //   body: {
+          //     type: "box",
+          //     layout: "vertical",
+          //     contents: [
+          //       {
+          //         type: "text",
+          //         text: "หมีขอ",
+          //         margin: "none",
+          //         color: "#009900",
+          //         size: "sm",
+          //       },
+          //       {
+          //         type: "text",
+          //         text: billInfo.billTitle,
+          //         weight: "bold",
+          //         size: "xxl",
+          //         margin: "md",
+          //       },
+          //       {
+          //         type: "text",
+          //         text: "เรียกเก็บโดย " + billInfo.owner_name,
+          //       },
+          //       {
+          //         type: "separator",
+          //         margin: "lg",
+          //       },
+          //       {
+          //         type: "box",
+          //         layout: "vertical",
+          //         margin: "lg",
+          //         spacing: "xs",
+          //         contents: userList,
+          //       },
+          //     ],
+          //   },
+          //   footer: {
+          //     type: "box",
+          //     layout: "vertical",
+          //     spacing: "sm",
+          //     contents: [
+          //       {
+          //         type: "button",
+          //         style: "primary",
+          //         height: "sm",
+          //         action: {
+          //           type: "uri",
+          //           label: "จ่ายเงิน",
+          //           uri:
+          //             "https://liff.line.me/1657560711-7MgLg4Ld?payment&billId=" +
+          //             resBillID,
+          //         },
+          //       },
+          //     ],
+          //   },
+          // },
+        },
+      ];
+
+      //send bill summary message
       await liff
-        .sendMessages([qr_message])
+        .sendMessages(message)
         .then(() => {
           console.log("message sent");
         })
         .catch((err) => {
           console.log("error sending message liff", err);
         });
-    }
 
-    liff.closeWindow();
+      //if it is prompay payment method, send qr code to the group
+      if (state.bankName === "PromptPay") {
+        //get url from imgur formular
+        //----old imgur code--------
+        // await axios
+        //   .get(
+        //     `https://www.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=1236e4750335db77007ca4721f9b9caa&photo_id=${imgur_photo_id}&format=json&nojsoncallback=1`
+        //   )
+        //   .then((res) => {
+        //     const qr_images = res.data.sizes.size;
+        //     qr_url = qr_images[3].source;
+        //     qr_thumb_url = qr_images[2].source;
+        //     console.log(res);
+        //   })
+        //   .catch((err) => {
+        //     console.log("Can not get image url");
+        //     console.err(err);
+        //   });
+        const qr_message = {
+          type: "flex",
+          altText: "flex message",
+          contents: {
+            type: "bubble",
+            body: {
+              type: "box",
+              layout: "vertical",
+              spacing: "md",
+              contents: [
+                {
+                  type: "text",
+                  text: billInfo.billTitle,
+                  wrap: true,
+                  weight: "bold",
+                  gravity: "center",
+                  size: "xl",
+                },
+                {
+                  type: "box",
+                  layout: "vertical",
+                  margin: "lg",
+                  spacing: "sm",
+                  contents: [
+                    {
+                      type: "box",
+                      layout: "baseline",
+                      spacing: "sm",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "สร้างบิลสำเร็จแล้ว",
+                          wrap: true,
+                          size: "sm",
+                          color: "#666666",
+                        },
+                      ],
+                    },
+                    {
+                      type: "box",
+                      layout: "baseline",
+                      spacing: "sm",
+                      contents: [
+                        {
+                          type: "text",
+                          text: "สามารถสแกน Qr จ่ายได้เลย",
+                          color: "#aaaaaa",
+                          size: "sm",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                {
+                  type: "box",
+                  layout: "vertical",
+                  margin: "xxl",
+                  contents: [
+                    {
+                      type: "image",
+                      url: qr_url,
+                      aspectMode: "cover",
+                      size: "full",
+                      margin: "md",
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        };
+
+        //send qr code
+        await liff
+          .sendMessages([qr_message])
+          .then(() => {
+            console.log("message sent");
+          })
+          .catch((err) => {
+            console.log("error sending message liff", err);
+          });
+      }
+
+      liff.closeWindow();
+    } else {
+      return false;
+    }
   };
 
-  const bankList = [
-    {
-      value: "SCB",
-      label: "ไทยพานิชย์",
-      logo: "https://meekor.blob.core.windows.net/misc/SCB.png",
-    },
-    {
-      value: "KBANK",
-      label: "กสิกรไทย",
-      logo: "https://meekor.blob.core.windows.net/misc/KBANK.png",
-    },
-    {
-      value: "BBL",
-      label: "กรุงเทพ",
-      logo: "https://meekor.blob.core.windows.net/misc/BBL.png",
-    },
-    {
-      value: "KTB",
-      label: "กรุงไทย",
-      logo: "https://meekor.blob.core.windows.net/misc/KTB.png",
-    },
-    {
-      value: "BAY",
-      label: "กรุงศรี",
-      logo: "https://meekor.blob.core.windows.net/misc/BAY.png",
-    },
-    {
-      value: "TTB",
-      label: "ทีเอ็มบีธนชาต",
-      logo: "https://meekor.blob.core.windows.net/misc/TTB.png",
-    },
-    {
-      value: "KK",
-      label: "เกรียตินาคิน",
-      logo: "https://meekor.blob.core.windows.net/misc/kk.png",
-    },
-    {
-      value: "TISCO",
-      label: "ทิสโก้",
-      logo: "https://meekor.blob.core.windows.net/misc/tisco.png",
-    },
-    {
-      value: "CIMBT",
-      label: "ซีไอเอมบี",
-      logo: "https://meekor.blob.core.windows.net/misc/cimb.png",
-    },
-    {
-      value: "LH",
-      label: "แลนด์ แอนด์ เฮ้าส์",
-      logo: "https://meekor.blob.core.windows.net/misc/lh.png",
-    },
-    {
-      value: "UOB",
-      label: "ยูโอบี",
-      logo: "https://meekor.blob.core.windows.net/misc/UOB.png",
-    },
-    {
-      value: "BACC",
-      label: "การเกษตรและสหกรณ์",
-      logo: "https://meekor.blob.core.windows.net/misc/BAAC.png",
-    },
-    {
-      value: "GSB",
-      label: "ออมสิน",
-      logo: "https://meekor.blob.core.windows.net/misc/GSB.png",
-    },
-  ];
   const isDisabled = () => {
     if (state.accName === "" || state.accNum === "") {
       return true;

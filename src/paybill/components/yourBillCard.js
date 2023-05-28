@@ -17,34 +17,52 @@ const YourBillCard = ({ bill, userProfiles }) => {
       return {
         type: "box",
         layout: "horizontal",
-        contents: debt.status=="open" ?  [
-          // if debt is not paid
-          {
-            type: "text",
-            text: "@" + findOwnerName(debt.user_id),
-            color: "#694d43",
-          },
-          {
-            type: "text",
-            text: "" + debt.amount.toFixed(2) + " Bath",
-            align: "end",
-          },
-        ] :
-        // if debt is paid or pending then return striking name
-        [
-          {
-            type: "text",
-            text: "@" + findOwnerName(debt.user_id),
-            color: "#694d43",
-            decoration: "line-through"
-          },
-          {
-            type: "text",
-            text: "" + debt.amount.toFixed(2) + " Bath",
-            align: "end",
-            decoration: "line-through",
-          },
-        ] ,
+        contents:
+          debt.status == "open"
+            ? [
+                // if debt is not paid
+                {
+                  type: "text",
+                  text: "@" + findOwnerName(debt.user_id),
+                  color: "#694d43",
+                },
+                {
+                  type: "text",
+                  text: "" + debt.amount.toFixed(2) + " Bath",
+                  align: "end",
+                },
+              ]
+            : debt.status == "pending"
+            ? [
+                {
+                  type: "text",
+                  text: "@" + findOwnerName(debt.user_id),
+                  color: "#FFDB58",
+                  decoration: "line-through",
+                },
+                {
+                  type: "text",
+                  text: "" + debt.amount.toFixed(2) + " Bath",
+                  align: "end",
+                  color: "#FFDB58",
+                  decoration: "line-through",
+                },
+              ]
+            : // if debt is paid or pending then return striking name
+              [
+                {
+                  type: "text",
+                  text: "@" + findOwnerName(debt.user_id),
+                  color: "#694d43",
+                  decoration: "line-through",
+                },
+                {
+                  type: "text",
+                  text: "" + debt.amount.toFixed(2) + " Bath",
+                  align: "end",
+                  decoration: "line-through",
+                },
+              ],
       };
     });
     const message = [
@@ -334,52 +352,64 @@ const YourBillCard = ({ bill, userProfiles }) => {
           </h1>
         </div>
         <div class="px-6 py-4">
-          <button onClick={goToDetails}>
-            {" "}
-            <u>ดูรายละเอียด </u>
-          </button>
+          <div className="flex w-full justify-center">
+            <button className="" onClick={goToDetails}>
+              {" "}
+              <u>ดูรายละเอียด </u>
+            </button>
+          </div>
+
           <div>
-            <h1 className="text-lg font-semibold">ยังไม่ได้จ่าย</h1>
+            {unpaid.length > 0 && (
+              <h1 className="text-lg font-semibold mt-2">ยังไม่ได้จ่าย</h1>
+            )}
             {unpaid.map((debt) => {
               return (
                 <div>
-                  <h4>
-                    {findOwnerName(debt.user_id)} ฿{debt.amount.toFixed(2)}
-                  </h4>
+                  <div className="flex justify-between px-2">
+                    <div> {findOwnerName(debt.user_id)}</div>
+                    <div> ฿ {debt.amount.toFixed(2)}</div>
+                  </div>
                 </div>
               );
             })}
-            <h1 className="text-lg font-semibold">รอการยืนยัน</h1>
+            {pending.length > 0 && (
+              <h1 className="text-lg font-semibold mt-2">รอการยืนยัน</h1>
+            )}
             {pending.map((debt) => {
               return (
                 <div>
-                  <h4>
-                    {findOwnerName(debt.user_id)} ฿{debt.amount.toFixed(2)}
-                  </h4>
+                  <div className="flex justify-between px-2">
+                    <div> {findOwnerName(debt.user_id)}</div>
+                    <div> ฿ {debt.amount.toFixed(2)}</div>
+                  </div>
                 </div>
               );
             })}
-            <h1 className="text-lg font-semibold">จ่ายแล้ว</h1>
+            {paid.length > 0 && (
+              <h1 className="text-lg font-semibold mt-2">จ่ายแล้ว</h1>
+            )}
             {paid.map((debt) => {
               return (
                 <div>
-                  <h4>
-                    {findOwnerName(debt.user_id)} ฿{debt.amount.toFixed(2)}
-                  </h4>
+                  <div className="flex justify-between px-2">
+                    <div> {findOwnerName(debt.user_id)}</div>
+                    <div> ฿ {debt.amount.toFixed(2)}</div>
+                  </div>
                 </div>
               );
             })}
           </div>
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center mt-2">
             <div className="flex w-full justify-center py-2">
               <button
-                class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 w-full rounded mx-2 "
+                class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 w-full rounded-xl mx-2 "
                 onClick={deleteBill}
               >
                 ยกเลิก
               </button>
               <button
-                class="brown hover:bg-yellow-900 text-white font-bold py-2 w-full rounded mx-2"
+                class="brown hover:bg-yellow-900 text-white font-bold py-2 w-full rounded-xl mx-2"
                 onClick={remind}
               >
                 ทวงเงิน
@@ -388,7 +418,7 @@ const YourBillCard = ({ bill, userProfiles }) => {
 
             {pending.length > 0 && (
               <button
-                class="mint hover:bg-teal-500 text-white font-bold py-2 mx-2 rounded"
+                class="mint hover:bg-teal-500 text-white font-bold py-2 mx-2 rounded-xl"
                 onClick={goToConfirm}
               >
                 {" "}

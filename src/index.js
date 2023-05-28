@@ -17,7 +17,6 @@ import AddAccountPage from "./createbill/addaccount/addAccountPage.js";
 import AddPromptpayPage from "./createbill/addaccount/addPromptpay.js";
 import PersonalBillPage from "./paybill/personalBillPage.js";
 import PaymentPage from "./paybill/paymentPage.js";
-import PayBillPage from "./paybill/payBillPage.js";
 import BankTransferPage from "./paybill/bankTransferPage.js";
 import CashPayPage from "./paybill/cashPayPage.js";
 import EqualBillPage from "./createEqualBill/equalBillPage.js";
@@ -47,6 +46,7 @@ root.render(
         {/* <Route path="/" element={<PaymentPage />} /> */}
         {/* <Route path="/" element={<PersonalBillPage />} /> */}
         {/* <Route path="/" element={<ConfirmbillPage />} /> */}
+        {/* <Route path="/" element={<AddAccountPage />} /> */}
 
         <Route path="/summary" element={<PersonalBillPage />} />
 

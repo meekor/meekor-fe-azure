@@ -166,8 +166,11 @@ const BankTransferPage = () => {
                       action: {
                         type: "uri",
                         label: "ตรวจเช็ค",
-                        uri: "https://liff.line.me/1657560711-7MgLg4Ld?confirm&billId=" +
-                          bill.id +"&groupId="+bill.group_id,
+                        uri:
+                          "https://liff.line.me/1657560711-7MgLg4Ld?confirm&billId=" +
+                          bill.id +
+                          "&groupId=" +
+                          bill.group_id,
                       },
                       color: "#ff82a7",
                       style: "primary",
@@ -198,13 +201,13 @@ const BankTransferPage = () => {
   const validConfirmButton =
     "w-3/5 pink hover:bg-pink-400 text-white font-bold py-2 px-4 mt-3 rounded-xl ";
   const invalidConfirmButton =
-    "w-3/5 bg-gray-400 hover:bg-gray-400 text-white font-bold py-2 px-4 mt-3 rounded-xl ";
+    "w-3/5 bg-gray-500 hover:bg-gray-500 text-white font-bold py-2 px-4 mt-3 rounded-xl ";
   useEffect(() => {
     console.log(imgUrl);
   }, [imgUrl]);
 
   return (
-    <div className="flex h-screen cream">
+    <div className="flex min-h-screen cream">
       <div className="flex flex-col h-full">
         <div class=" flex w-screen h-32 min-h-1/5 pink rounded-b-3xl drop-shadow-md">
           <div class="w-4/6 ">

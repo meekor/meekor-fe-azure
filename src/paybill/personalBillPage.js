@@ -36,7 +36,7 @@ const PersonalBillPage = () => {
 
   useEffect(() => {
     axios
-      .get(` https://meekor.onrender.com/v1/group/${groupId}/bill`, {
+      .get(`https://meekor-be.azurewebsites.net/v1/group/${groupId}/bill`, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
@@ -83,7 +83,7 @@ const PersonalBillPage = () => {
               setMenu(1);
             }}
           >
-            บิลรอจ่าย
+            บิลรอคุณจ่าย
           </button>
           <button
             className={

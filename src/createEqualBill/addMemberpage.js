@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useLiff } from "react-liff";
 import axios from "axios";
 
 const AddMemberPage = () => {
   const [checked, setChecked] = useState([]);
+  const navigate = useNavigate();
+
   // mockData(group members)
   const [checkList, setCheckList] = useState(["Unn", "HB", "Creamder", "gade"]);
   const [usersProfile, setUsersProfile] = useState({});
@@ -52,11 +54,26 @@ const AddMemberPage = () => {
 
   const onSubmit = () => {
     console.log(checkedItems);
+    navigate("/equal_bill", {
+      state: { checked, groupId, usersProfile },
+    });
   };
 
+  const isDisable = () => {
+    if (checked.length === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const validButton =
+    "p-3  pink w-2/3 text-white text-lg rounded-xl drop-shadow-lg ";
+  const invalidButton =
+    "p-3 w-2/3 text-white text-lg rounded-xl drop-shadow-lg bg-gray-500";
+
   return (
-    <div class=" h-screen cream ">
-      <div class="flex pink  h-28 rounded-b-3xl drop-shadow-sm">
+    <div class=" min-h-screen cream ">
+      <div class="flex pink h-28 rounded-b-3xl drop-shadow-sm">
         <h1 class="text-white text-3xl font-bold ml-5 pt-8">
           ใครหารบิลนี้บ้าง?
         </h1>
@@ -200,21 +217,15 @@ const AddMemberPage = () => {
 
       {/* <div class="">{`output test: ${checkedItems}`}</div> */}
 
-      <div class="flex w-full justify-center items-end">
-        <Link
-          to="/equal_bill"
-          state={{ checked, groupId, usersProfile }}
-          class="p-2 mt-16 w-2/3"
+      <div class="flex w-full justify-center items-center">
+        <button
+          type="button"
+          className={isDisable() ? invalidButton : validButton}
+          disabled={isDisable()}
+          onClick={onSubmit}
         >
-          <button
-            type="button"
-            class="p-3  pink w-full text-white text-lg rounded-xl drop-shadow-sm disabled:bg-gray-500"
-            disabled={checked.length === 0}
-            onClick={onSubmit()}
-          >
-            ต่อไป
-          </button>
-        </Link>
+          ต่อไป
+        </button>
       </div>
     </div>
   );

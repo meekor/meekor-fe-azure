@@ -54,8 +54,6 @@ const DebtCard = ({ debtData, userProfiles }) => {
     </div>
   );
 
-  useEffect(() => {}, [billID]);
-
   return (
     <div className="">
       <div class="bg-white max-w-sm rounded-xl mb-5 overflow-hidden shadow-lg">

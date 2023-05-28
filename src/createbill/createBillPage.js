@@ -61,6 +61,7 @@ const CreateBillPage = () => {
         discount: state.discount,
         owner_id: profile.userId,
         owner_name: profile.displayName,
+        groupId: groupId,
       },
     });
   };
@@ -138,7 +139,7 @@ const CreateBillPage = () => {
               <input
                 name="billTitle"
                 value={state.billTitle}
-                placeholder="bill Title"
+                placeholder="ชื่อบิลของคุณ"
                 onChange={handleChange}
                 className={validTitle ? validTitleClass : invalidTitleClass}
               />
@@ -303,7 +304,7 @@ const CreateBillPage = () => {
             );
           })}
         </div>
-        <div className="my-1 mt-8 items-center mx-5">
+        {/* <div className="my-1 mt-8 items-center mx-5">
           <div className="flex w-full my-2">
             <h1 className=" w-full p-1 text-lg  ml-3 font-medium">
               Service Charge
@@ -339,30 +340,15 @@ const CreateBillPage = () => {
             />
             <div className="w-1/3" />
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-center items-end w-full h-full mt-10 mb-8 mr-5">
-          <Link
-            to={"/separate_bill"}
-            state={{
-              billTitle: state.billTitle,
-              itemList: inputList,
-              vat: state.vat,
-              serviceCharge: state.serviceCharge,
-              discount: state.discount,
-              owner_id: profile.userId,
-              owner_name: profile.displayName,
-              groupId: groupId,
-            }}
-            className="w-full flex justify-center"
+          <button
+            className={isDisabled() ? invalidButtonClass : validButtonClass}
+            disabled={isDisabled()}
+            onClick={passValue}
           >
-            <button
-              className={isDisabled() ? invalidButtonClass : validButtonClass}
-              disabled={isDisabled()}
-              onClick={passValue}
-            >
-              ต่อไป
-            </button>
-          </Link>
+            ต่อไป
+          </button>
         </div>
       </div>
     </div>

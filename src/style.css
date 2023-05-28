@@ -55,7 +55,7 @@ input::-webkit-inner-spin-button {
 }
 
 .mint {
-  background-color: #7de1cf;
+  background-color: #5de7ce;
 }
 
 .softred {
@@ -65,6 +65,19 @@ input::-webkit-inner-spin-button {
 .bright-green {
   background-color: #4de119;
 }
+.soft-brown {
+  background-color: #b49388;
+}
+.lightpink {
+  background-color: #ff9bb8;
+}
+.lightpink2 {
+  background-color: #ffcbda;
+}
+.bg-zinc {
+  background-color: rgb(212 212 212);
+}
+
 .font-brown {
   color: #694d43;
 }
@@ -78,7 +91,7 @@ input::-webkit-inner-spin-button {
   color: #a37261;
 }
 .font-mint {
-  color: #7de1cf;
+  color: #8addce;
 }
 
 /* .checkbox-wrapper-18 .round {
