@@ -110,7 +110,7 @@ const BankTransferPage = () => {
     console.log("bill id to update:" + bill.id);
 
     axios
-      .put(`https://meekor.onrender.com/v1/bill/${bill.id}`, bill, {
+      .put(`https://meekor-be.azurewebsites.net/v1/bill/${bill.id}`, bill, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },

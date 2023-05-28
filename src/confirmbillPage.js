@@ -24,7 +24,7 @@ const confirmbillPage = () => {
 
   useEffect(() => {
     axios
-      .get(`https://meekor.onrender.com/v1/bill/${billId}`, {
+      .get(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
@@ -348,7 +348,7 @@ const confirmbillPage = () => {
     };
 
     await axios
-      .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
+      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
@@ -399,7 +399,7 @@ const confirmbillPage = () => {
     };
 
     await axios
-      .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
+      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },

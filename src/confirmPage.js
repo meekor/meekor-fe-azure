@@ -80,7 +80,7 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
       })
       .catch((err) => console.error(err));
     axios
-      .get(`https://meekor.onrender.com/v1/bill/${billId}`, {
+      .get(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
@@ -403,7 +403,7 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
     };
 
     await axios
-      .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
+      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
@@ -452,7 +452,7 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
 
     //update bill
     await axios
-      .put(`https://meekor.onrender.com/v1/bill/${billId}`, billObject, {
+      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
         headers: {
           "ngrok-skip-browser-warning": "3000",
         },
