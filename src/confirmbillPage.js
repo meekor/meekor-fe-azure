@@ -309,9 +309,9 @@ const confirmbillPage = () => {
   };
 
   const handleCloseStatus = async () => {
-    let isConfirm = window.confirm("ยืนยันการจ่ายของสลิปนี้");
+    let popup = window.confirm("ยืนยันการจ่ายของสลิปนี้");
     console.log("handle func called");
-    if (!isConfirm) {
+    if (!popup) {
       return 0;
     }
 
@@ -379,8 +379,8 @@ const confirmbillPage = () => {
   };
 
   const handleOpenStatus = async () => {
-    let isConfirm = window.confirm("ปฎิเสธสลิปนี้");
-    if (!isConfirm) {
+    let popup = window.confirm("ปฎิเสธสลิปนี้");
+    if (!popup) {
       return 0;
     }
     const m = debts.forEach(function (entry) {

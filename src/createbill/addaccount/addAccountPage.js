@@ -238,8 +238,8 @@ const AddAccountPage = () => {
       setErrorMassage("no more than 13 digits");
     }
 
-    let isConfirm = window.confirm("ยืนยันการสร้างบิล?");
-    if (isConfirm) {
+    let popup = window.confirm("ยืนยันการสร้างบิล?");
+    if (popup) {
       console.log(state.accNum);
       let qr_url = "";
       let sum = calSum();

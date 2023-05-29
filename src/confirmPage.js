@@ -367,8 +367,8 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
   //confirm payment and close dept status, close bill status: pennding-->close
   const handleCloseStatus = async (userid) => {
     //close dept status
-    let isConfirm = window.confirm("ยืนยันการจ่าย");
-    if (!isConfirm) {
+    let popup = window.confirm("ยืนยันการจ่าย");
+    if (!popup) {
       return 0;
     }
 
@@ -389,49 +389,47 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
           console.log("bill closed");
           await sendClosebillFlex(userid);
         }
-        
-    const billObject = {
-      name: bill.name,
-      total: bill.total,
-      status: billStatus,
-      owner_id: bill.owner_id,
-      payment: {
-        update: {
-          qr_code: bill.payment.qr_code,
-          bank_info: bill.payment.bank_info,
-          account_name: bill.account_name,
-          account_number: bill.account_number,
-        },
-      },
-      debts: debts,
-      items: bill.items,
-    };
 
-    await axios
-      .put(
-        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
-        billObject,
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "3000",
+        const billObject = {
+          name: bill.name,
+          total: bill.total,
+          status: billStatus,
+          owner_id: bill.owner_id,
+          payment: {
+            update: {
+              qr_code: bill.payment.qr_code,
+              bank_info: bill.payment.bank_info,
+              account_name: bill.account_name,
+              account_number: bill.account_number,
+            },
           },
-        }
-      )
-      .then((res) => {
-        console.log("Dept status set to close");
-        setIsConfirm(!isConfirm);
-        //console.log("allclose:" + allclose);
-        //window.location.reload(false);
-      })
-      .catch((error) => {
-        console.error("ok button: " + error);
-      });
-        
+          debts: debts,
+          items: bill.items,
+        };
+
+        await axios
+          .put(
+            `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+            billObject,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "3000",
+              },
+            }
+          )
+          .then((res) => {
+            console.log("Dept status set to close");
+            setIsConfirm(!isConfirm);
+            //console.log("allclose:" + allclose);
+            //window.location.reload(false);
+          })
+          .catch((error) => {
+            console.error("ok button: " + error);
+          });
       })
       .catch((err) => {
         console.log(err);
       });
-
   };
 
   //console.log(profileDict);
@@ -439,8 +437,8 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
   //Not confirm payment dept status: pending --> open
   const handleOpenStatus = async (userid) => {
     //open dept status
-    let isConfirm = window.confirm("ปฏิเสธการจ่าย");
-    if (!isConfirm) {
+    let popup = window.confirm("ปฏิเสธการจ่าย");
+    if (!popup) {
       return 0;
     }
     const m = debts.forEach(function (entry) {
