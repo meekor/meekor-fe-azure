@@ -320,15 +320,17 @@ const confirmbillPage = () => {
         entry.status = "close";
       }
     });
-    await sendConfirmFlex();
-
-    //close bill
-    let billStatus = bill.status;
-    const allclose = debts.every((debts) => debts.status === "close");
-    if (allclose) {
-      billStatus = "close";
-      await sendClosebillFlex();
-    }
+    sendConfirmFlex()
+      .then(async () => {
+        //close bill
+        let billStatus = bill.status;
+        const allclose = debts.every((debts) => debts.status === "close");
+        if (allclose) {
+          billStatus = "close";
+          await sendClosebillFlex();
+        }
+      })
+      .catch((err) => console.log(err));
 
     const billObject = {
       name: bill.name,
@@ -348,11 +350,15 @@ const confirmbillPage = () => {
     };
 
     await axios
-      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
-        headers: {
-          "ngrok-skip-browser-warning": "3000",
-        },
-      })
+      .put(
+        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+        billObject,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "3000",
+          },
+        }
+      )
       .then((res) => {
         console.log("Dept status set to close");
         // window.location.href =
@@ -399,11 +405,15 @@ const confirmbillPage = () => {
     };
 
     await axios
-      .put(`https://meekor-be.azurewebsites.net/v1/bill/${billId}`, billObject, {
-        headers: {
-          "ngrok-skip-browser-warning": "3000",
-        },
-      })
+      .put(
+        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+        billObject,
+        {
+          headers: {
+            "ngrok-skip-browser-warning": "3000",
+          },
+        }
+      )
       .then((res) => {
         console.log("Status set to open");
         console.log(res);

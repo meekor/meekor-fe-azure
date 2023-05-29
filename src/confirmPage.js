@@ -378,17 +378,21 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
         //entry.status = "pending";
       }
     });
-    await sendConfirmFlex(userid);
-
-    //close bill satus
-    let billStatus = bill.status;
-    const allclose = debts.every((debts) => debts.status === "close");
-    if (allclose) {
-      //set bill status to close
-      billStatus = "close";
-      console.log("bill closed");
-      await sendClosebillFlex(userid);
-    }
+    sendConfirmFlex(userid)
+      .then(async () => {
+        //close bill satus
+        let billStatus = bill.status;
+        const allclose = debts.every((debts) => debts.status === "close");
+        if (allclose) {
+          //set bill status to close
+          billStatus = "close";
+          console.log("bill closed");
+          await sendClosebillFlex(userid);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
     const billObject = {
       name: bill.name,
