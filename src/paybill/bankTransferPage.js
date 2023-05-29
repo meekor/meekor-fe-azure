@@ -208,7 +208,7 @@ const BankTransferPage = () => {
 
   return (
     <div className="flex min-h-screen cream">
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col min-h-screen">
         <div class=" flex w-screen h-32 min-h-1/5 pink rounded-b-3xl drop-shadow-md">
           <div class="w-4/6 ">
             <h1 class=" text-3xl font-bold text-white ml-6 mt-10  ">
