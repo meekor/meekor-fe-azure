@@ -419,14 +419,13 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
       )
       .then((res) => {
         console.log("Dept status set to close");
+        setIsConfirm(!isConfirm);
         //console.log("allclose:" + allclose);
         //window.location.reload(false);
       })
       .catch((error) => {
         console.error("ok button: " + error);
       });
-
-    setIsConfirm(!isConfirm);
   };
 
   //console.log(profileDict);
@@ -477,13 +476,12 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
       .then((res) => {
         console.log("Status set to open");
         console.log(res);
+        setIsConfirm(!isConfirm);
         //window.location.reload(false);
       })
       .catch((error) => {
         console.error("close button: " + error);
       });
-
-    setIsConfirm(!isConfirm);
   };
 
   const datarow = {
