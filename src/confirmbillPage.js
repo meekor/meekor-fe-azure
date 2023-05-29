@@ -329,49 +329,51 @@ const confirmbillPage = () => {
           billStatus = "close";
           await sendClosebillFlex();
         }
+
+        const billObject = {
+          name: bill.name,
+          total: bill.total,
+          status: billStatus,
+          owner_id: bill.owner_id,
+          payment: {
+            update: {
+              qr_code: bill.payment.qr_code,
+              bank_info: bill.payment.bank_info,
+              account_name: bill.account_name,
+              account_number: bill.account_number,
+            },
+          },
+          debts: debts,
+          items: bill.items,
+        };
+
+        await axios
+          .put(
+            `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
+            billObject,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "3000",
+              },
+            }
+          )
+          .then((res) => {
+            console.log("Dept status set to close");
+            // window.location.href =
+            //   "/confirm?billId=" + bill.id + "&groupId=" + bill.group_id;
+            //console.log("allclose:" + allclose);
+            //window.location.reload(false);
+            //liff.closeWindow();
+
+            navigate(
+              "/confirm?billId=" + bill.id + "&groupId=" + bill.group_id
+            );
+          })
+          .catch((error) => {
+            console.error("ok button: " + error);
+          });
       })
       .catch((err) => console.log(err));
-
-    const billObject = {
-      name: bill.name,
-      total: bill.total,
-      status: billStatus,
-      owner_id: bill.owner_id,
-      payment: {
-        update: {
-          qr_code: bill.payment.qr_code,
-          bank_info: bill.payment.bank_info,
-          account_name: bill.account_name,
-          account_number: bill.account_number,
-        },
-      },
-      debts: debts,
-      items: bill.items,
-    };
-
-    await axios
-      .put(
-        `https://meekor-be.azurewebsites.net/v1/bill/${billId}`,
-        billObject,
-        {
-          headers: {
-            "ngrok-skip-browser-warning": "3000",
-          },
-        }
-      )
-      .then((res) => {
-        console.log("Dept status set to close");
-        // window.location.href =
-        //   "/confirm?billId=" + bill.id + "&groupId=" + bill.group_id;
-        //console.log("allclose:" + allclose);
-        //window.location.reload(false);
-        //liff.closeWindow();
-
-        navigate("/confirm?billId=" + bill.id + "&groupId=" + bill.group_id);
-      })
-      .catch((error) => {
-        console.error("ok button: " + error);
-      });
 
     //setIsConfirm(!isConfirm);
   };

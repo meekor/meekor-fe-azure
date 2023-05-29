@@ -389,11 +389,7 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
           console.log("bill closed");
           await sendClosebillFlex(userid);
         }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
+        
     const billObject = {
       name: bill.name,
       total: bill.total,
@@ -430,6 +426,12 @@ const confirmPage = ({ UserId = "C1fe81d2a7d101b2578259505bd232573" }) => {
       .catch((error) => {
         console.error("ok button: " + error);
       });
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   };
 
   //console.log(profileDict);
